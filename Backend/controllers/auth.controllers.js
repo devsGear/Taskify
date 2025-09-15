@@ -22,11 +22,7 @@ export async function register(req, res){
             maxAge: 15*24*60*60*1000
         });
 
-        res.status(201).json({
-            _id: newUser._id,
-            name: newUser.name,
-            email: newUser.email
-        });
+        res.sendStatus(201);
 
     } catch (error) {
         res.status(500).json({ message: "Internal server error" });
@@ -61,11 +57,8 @@ export async function login(req, res){
             maxAge: 15*24*60*60*1000
         });
 
-        res.status(200).json({
-            name: user.name,
-            email: user.email
-        });
-        
+        res.status(200).send({"token": token});
+
     } catch (error) {
         res.status(500).json({ message: "Server Error" });
     }
