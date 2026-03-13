@@ -26,7 +26,25 @@ export async function createTask(taskData) {
 
 export async function getTasksByCategory(category) {
     try {
-        const response = await api.get(`/tasks/category?category=${category}`);
+        const response = await api.get(`/tasks?category=${encodeURIComponent(category)}`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || { message: "Network error" };
+    }
+}
+
+export async function markTaskDone(taskId) {
+    try {
+        const response = await api.patch(`/tasks/${taskId}`);
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || { message: "Network error" };
+    }
+}
+
+export async function deleteTask(taskId) {
+    try {
+        const response = await api.delete(`/tasks/${taskId}`);
         return response.data;
     } catch (error) {
         throw error.response?.data || { message: "Network error" };

@@ -27,18 +27,21 @@ export async function createTask(req, res){
 export async function findByCategory(req, res){
     try {
         const category = req.query.category;
+        const query = { userId: req.user._id };
 
-        const tasks = await Task.find({ category });
-
-        if (!tasks) {
-            return res.status(404).json({ message: "No Task Found" });
+        if (category) {
+            query.category = category.toLowerCase();
         }
+
+        const tasks = await Task.find(query).sort({ createdAt: -1 });
     
         const filteredTasks = tasks.map( task => ({
-            "id": task._id,
+            "_id": task._id,
             "title": task.title,
+            "description": task.description,
             "category": task.category,
             "isDone": task.isDone,
+            "createdAt": task.createdAt,
         }));
 
         res.status(200).send(filteredTasks);
